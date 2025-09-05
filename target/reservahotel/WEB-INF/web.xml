@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1"
+         xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+
+    <!-- SearchServlet -->
+    <servlet>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-class>cl.ipchile.reservahotel.SearchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/SearchServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- HabitacionesServlet -->
+    <servlet>
+        <servlet-name>HabitacionesServlet</servlet-name>
+        <servlet-class>cl.ipchile.reservahotel.HabitacionesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HabitacionesServlet</servlet-name>
+        <url-pattern>/HabitacionesServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- ReservaServlet -->
+    <servlet>
+        <servlet-name>ReservaServlet</servlet-name>
+        <servlet-class>cl.ipchile.reservahotel.ReservaServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReservaServlet</servlet-name>
+        <url-pattern>/ReservaServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- LoginServlet -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>cl.ipchile.reservahotel.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- RegistroServlet -->
+    <servlet>
+        <servlet-name>RegistroServlet</servlet-name>
+        <servlet-class>cl.ipchile.reservahotel.RegistroServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RegistroServlet</servlet-name>
+        <url-pattern>/RegistroServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- MisReservasServlet -->
+    <servlet>
+        <servlet-name>MisReservasServlet</servlet-name>
+        <servlet-class>cl.ipchile.reservahotel.MisReservasServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MisReservasServlet</servlet-name>
+        <url-pattern>/MisReservasServlet</url-pattern>
+    </servlet-mapping>
+
+    <!-- Configuración de sesión -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+</web-app>

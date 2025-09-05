@@ -4,6 +4,8 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.persistence.*;
 import java.io.IOException;
+import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class LoginServlet extends HttpServlet {
 
@@ -19,25 +21,44 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String passwordIngresada = request.getParameter("password");
 
         EntityManager em = emf.createEntityManager();
 
         try {
             TypedQuery<Usuario> query = em.createQuery(
-                "SELECT u FROM Usuario u WHERE u.email = :email AND u.password = :password", Usuario.class);
+                "SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class);
             query.setParameter("email", email);
-            query.setParameter("password", password);
 
-            Usuario usuario = query.getResultStream().findFirst().orElse(null);
+            List<Usuario> usuarios = query.getResultList();
 
-            if (usuario != null) {
-                request.getSession().setAttribute("usuario", usuario);
-                response.sendRedirect("index.jsp");
-            } else {
-                request.setAttribute("error", "Credenciales incorrectas");
+            if (usuarios.isEmpty()) {
+                request.setAttribute("error", "Correo no registrado.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
             }
+
+            Usuario usuario = usuarios.get(0);
+
+            // 🔐 Verificar contraseña con BCrypt
+            boolean passwordValida = BCrypt.checkpw(passwordIngresada, usuario.getPassword());
+
+            if (!passwordValida) {
+                request.setAttribute("error", "Contraseña incorrecta.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
+            // ✅ Login exitoso
+            HttpSession session = request.getSession();
+            session.setAttribute("usuario", usuario);
+
+            response.sendRedirect("index.jsp");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Ocurrió un error al iniciar sesión.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } finally {
             em.close();
         }

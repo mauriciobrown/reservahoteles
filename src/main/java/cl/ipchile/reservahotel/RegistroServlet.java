@@ -5,6 +5,7 @@ import jakarta.servlet.http.*;
 import jakarta.persistence.*;
 import java.io.IOException;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class RegistroServlet extends HttpServlet {
 
@@ -26,7 +27,7 @@ public class RegistroServlet extends HttpServlet {
         EntityManager em = emf.createEntityManager();
 
         try {
-            // 🔍 Llamar al procedimiento almacenado para verificar si el correo ya existe
+            // 🔍 Verificar si el correo ya está registrado
             StoredProcedureQuery sp = em.createStoredProcedureQuery("verificar_usuario_por_email");
             sp.registerStoredProcedureParameter("p_email", String.class, ParameterMode.IN);
             sp.setParameter("p_email", email);
@@ -41,10 +42,13 @@ public class RegistroServlet extends HttpServlet {
                 return;
             }
 
+            // 🔐 Hashear la contraseña con BCrypt
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
             Usuario nuevoUsuario = new Usuario();
             nuevoUsuario.setNombre(nombre);
             nuevoUsuario.setEmail(email);
-            nuevoUsuario.setPassword(password);
+            nuevoUsuario.setPassword(hashedPassword);
 
             em.getTransaction().begin();
             em.persist(nuevoUsuario);

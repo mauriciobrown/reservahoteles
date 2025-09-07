@@ -13,7 +13,7 @@
                 <div class="card p-4 shadow-sm animate-fade">
                     <h2 class="text-center mb-4"><i class="bi bi-person-plus icono-hotel"></i> Crear cuenta</h2>
 
-                    <form action="RegistroServlet" method="post">
+                    <form action="RegistroServlet" method="post" id="registroForm">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre:</label>
                             <input type="text" name="nombre" id="nombre" class="form-control" required>
@@ -27,6 +27,11 @@
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña:</label>
                             <input type="password" name="password" id="password" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="confirmPassword" class="form-label">Confirmar contraseña:</label>
+                            <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" required>
                         </div>
 
                         <button type="submit" class="btn-reservar w-100">Registrarse</button>
@@ -45,6 +50,17 @@
     <footer class="bg-dark text-white text-center py-3 mt-5">
         <p class="mb-0">© 2025 Sistema de Reservas Hoteleras</p>
     </footer>
+
+    <script>
+        document.getElementById("registroForm").addEventListener("submit", function(e) {
+            const password = document.getElementById("password").value;
+            const confirm = document.getElementById("confirmPassword").value;
+            if (password !== confirm) {
+                e.preventDefault();
+                alert("Las contraseñas no coinciden.");
+            }
+        });
+    </script>
 
 </body>
 </html>

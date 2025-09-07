@@ -25,8 +25,20 @@ body::before {
 
 .bg-dorado {
     background-color: #d4af37;
+    position: relative;
 }
 
+.logo-derecha {
+    position: absolute;
+    top: 30px;
+    right: 60px;
+    z-index: 10;
+}
+
+.logo-derecha img {
+    height: 140px;
+    width: auto;
+}
 
 /* Contenedores con fondo semitransparente */
 .container, .card, .hotel-card {

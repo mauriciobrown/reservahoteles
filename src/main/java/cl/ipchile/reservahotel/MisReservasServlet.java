@@ -4,6 +4,8 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.persistence.*;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MisReservasServlet extends HttpServlet {
@@ -19,7 +21,6 @@ public class MisReservasServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Verificar si el usuario está logueado
         Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
 
         if (usuario == null) {
@@ -30,14 +31,41 @@ public class MisReservasServlet extends HttpServlet {
         EntityManager em = emf.createEntityManager();
 
         try {
-            TypedQuery<Reserva> query = em.createQuery(
-                "SELECT r FROM Reserva r WHERE r.usuario = :usuario", Reserva.class);
-            query.setParameter("usuario", usuario);
+            StoredProcedureQuery spq = em.createStoredProcedureQuery("ver_reservas");
+            spq.registerStoredProcedureParameter("usuarioId", Integer.class, ParameterMode.IN);
+            spq.setParameter("usuarioId", usuario.getId().intValue());
 
-            List<Reserva> reservas = query.getResultList();
+            List<Object[]> resultados = spq.getResultList();
+            List<Reserva> reservas = new ArrayList<>();
+
+            for (Object[] fila : resultados) {
+                Reserva reserva = new Reserva();
+                reserva.setId(((Number) fila[0]).longValue());
+                reserva.setFechaInicio(((java.sql.Date) fila[1]).toLocalDate());
+                reserva.setFechaFin(((java.sql.Date) fila[2]).toLocalDate());
+
+                Habitacion habitacion = new Habitacion();
+                habitacion.setId(((Number) fila[3]).longValue());
+                habitacion.setNumero((String) fila[4]);
+                habitacion.setTipo((String) fila[5]);
+                habitacion.setPrecioPorNoche((BigDecimal) fila[6]);
+
+                Hotel hotel = new Hotel();
+                hotel.setId(((Number) fila[7]).longValue());
+                hotel.setNombre((String) fila[8]);
+                hotel.setUbicacion((String) fila[9]);
+                hotel.setEstrellas(((Number) fila[10]).intValue());
+
+                habitacion.setHotel(hotel);
+                reserva.setHabitacion(habitacion);
+                reserva.setUsuario(usuario);
+
+                reservas.add(reserva);
+            }
 
             request.setAttribute("reservas", reservas);
             request.getRequestDispatcher("misReservas.jsp").forward(request, response);
+
         } finally {
             em.close();
         }

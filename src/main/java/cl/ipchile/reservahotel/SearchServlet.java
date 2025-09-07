@@ -27,23 +27,11 @@ public class SearchServlet extends HttpServlet {
         List<Object[]> hotelesEncontrados;
 
         try {
-            Query query;
+            StoredProcedureQuery spq = em.createStoredProcedureQuery("buscar_hoteles");
+            spq.registerStoredProcedureParameter("destinoBuscado", String.class, ParameterMode.IN);
+            spq.setParameter("destinoBuscado", destino != null ? destino : "");
 
-            if (destino != null && !destino.isEmpty()) {
-                query = em.createNativeQuery("""
-                    SELECT id, nombre, ubicacion, estrellas, precio_minimo
-                    FROM vista_hoteles_por_destino
-                    WHERE LOWER(ubicacion) LIKE LOWER(?)
-                """);
-                query.setParameter(1, "%" + destino + "%");
-            } else {
-                query = em.createNativeQuery("""
-                    SELECT id, nombre, ubicacion, estrellas, precio_minimo
-                    FROM vista_hoteles_por_destino
-                """);
-            }
-
-            hotelesEncontrados = query.getResultList();
+            hotelesEncontrados = spq.getResultList();
 
         } finally {
             em.close();

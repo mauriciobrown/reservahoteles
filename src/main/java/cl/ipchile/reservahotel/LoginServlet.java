@@ -26,19 +26,24 @@ public class LoginServlet extends HttpServlet {
         EntityManager em = emf.createEntityManager();
 
         try {
-            TypedQuery<Usuario> query = em.createQuery(
-                "SELECT u FROM Usuario u WHERE u.email = :email", Usuario.class);
-            query.setParameter("email", email);
+            StoredProcedureQuery spq = em.createStoredProcedureQuery("buscar_usuario");
+            spq.registerStoredProcedureParameter("correo", String.class, ParameterMode.IN);
+            spq.setParameter("correo", email);
 
-            List<Usuario> usuarios = query.getResultList();
+            List<Object[]> resultados = spq.getResultList();
 
-            if (usuarios.isEmpty()) {
+            if (resultados.isEmpty()) {
                 request.setAttribute("error", "Correo no registrado.");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
 
-            Usuario usuario = usuarios.get(0);
+            Object[] fila = resultados.get(0);
+            Usuario usuario = new Usuario();
+            usuario.setId(((Number) fila[0]).longValue());
+            usuario.setNombre((String) fila[1]);
+            usuario.setEmail((String) fila[2]);
+            usuario.setPassword((String) fila[3]);
 
             // 🔐 Verificar contraseña con BCrypt
             boolean passwordValida = BCrypt.checkpw(passwordIngresada, usuario.getPassword());

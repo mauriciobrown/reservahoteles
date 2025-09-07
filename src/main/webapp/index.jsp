@@ -11,15 +11,22 @@
 <body class="bg-light">
 
     <!-- Hero con fondo -->
-    <div class="bg-dorado text-white text-center py-5 mb-4 shadow-sm">
-        <h1 class="display-5"><i class="bi bi-building icono-hotel"></i> Bienvenido a <strong>ReservaHotel</strong></h1>
-        <p class="lead">Encuentra tu próxima estadía con estilo y comodidad</p>
+ <div class="bg-dorado text-white text-center py-5 mb-4 shadow-sm position-relative">
+    <h1 class="display-5">
+        <i class="bi bi-building icono-hotel"></i> Bienvenido a <strong>Reserva de Hoteles</strong>
+    </h1>
+    <p class="lead">Encuentra tu próxima estadía con estilo y comodidad</p>
+
+    <div class="logo-derecha">
+        <img src="images/LogoHotel.png" alt="Logo ReservaHotel">
     </div>
+</div>
+
 
     <!-- Navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.jsp">ReservaHotel</a>
+            <a class="navbar-brand" href="index.jsp">Reserva Hotel</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
                 <span class="navbar-toggler-icon"></span>
             </button>

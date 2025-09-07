@@ -23,12 +23,20 @@ public class RegistroServlet extends HttpServlet {
         String nombre = request.getParameter("nombre");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
 
         EntityManager em = emf.createEntityManager();
 
         try {
+            // ✅ Validar que las contraseñas coincidan
+            if (!password.equals(confirmPassword)) {
+                request.setAttribute("error", "Las contraseñas no coinciden.");
+                request.getRequestDispatcher("registro.jsp").forward(request, response);
+                return;
+            }
+
             // 🔍 Verificar si el correo ya está registrado
-            StoredProcedureQuery sp = em.createStoredProcedureQuery("verificar_usuario_por_email");
+            StoredProcedureQuery sp = em.createStoredProcedureQuery("validar_email");
             sp.registerStoredProcedureParameter("p_email", String.class, ParameterMode.IN);
             sp.setParameter("p_email", email);
 

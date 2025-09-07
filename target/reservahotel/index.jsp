@@ -52,7 +52,7 @@
     <div class="container">
         <div class="card p-4 shadow-sm mb-4 animate__animated animate__fadeIn">
             <h2 class="mb-3"><i class="bi bi-search"></i> Buscar hoteles por destino</h2>
-            <form action="SearchServlet" method="get" class="row g-3">
+            <form action="BuscarServlet" method="get" class="row g-3">
                 <div class="col-md-8">
                     <input type="text" name="destino" class="form-control" placeholder="Ej. Santiago" required>
                 </div>
